@@ -79,3 +79,7 @@ local.properties
 .pydevproject
 **/__pycache__/
 .idea/
+
+
+.venv/
+EODP_TER_2021/
