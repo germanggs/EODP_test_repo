@@ -33,22 +33,22 @@ save_dir.mkdir(parents=True, exist_ok=True)
 
 files = {
     "VNIR-0": {
-        "truth": "ism_toa_VNIR-0.nc",
+        "truth": "ism_toa_isrf_VNIR-0.nc",
         "equalized": "l1b_toa_VNIR-0.nc",
         "non_equalized": "l1b_toa_VNIR-0.nc",
     },
     "VNIR-1": {
-        "truth": "ism_toa_VNIR-1.nc",
+        "truth": "ism_toa_isrf_VNIR-1.nc",
         "equalized": "l1b_toa_VNIR-1.nc",
         "non_equalized": "l1b_toa_VNIR-1.nc",
     },
     "VNIR-2": {
-        "truth": "ism_toa_VNIR-2.nc",
+        "truth": "ism_toa_isrf_VNIR-2.nc",
         "equalized": "l1b_toa_VNIR-2.nc",
         "non_equalized": "l1b_toa_VNIR-2.nc",
     },
     "VNIR-3": {
-        "truth": "ism_toa_VNIR-3.nc",
+        "truth": "ism_toa_isrf_VNIR-3.nc",
         "equalized": "l1b_toa_VNIR-3.nc",
         "non_equalized": "l1b_toa_VNIR-3.nc",
     },

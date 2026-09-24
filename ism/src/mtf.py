@@ -91,6 +91,22 @@ class mtf:
         :return fnAct: 1D normalised frequencies 2D ACT (f/(1/w))
         :return fnAlt: 1D normalised frequencies 2D ALT (f/(1/w))
         """
+        fstepAlt = 1 / nlines / w
+        fstepAct = 1 / ncolumns / w
+
+        eps = 1e-6
+        fAlt = np.arange(-1 / (2 * w), 1 / (2 * w) - eps, fstepAlt)
+        fAct = np.arange(-1 / (2 * w), 1 / (2 * w) - eps, fstepAct)
+
+        [fAltxx, fActxx] = np.meshgrid(fAlt, fAct, indexing='ij')
+        f2D = np.sqrt(fAltxx * fAltxx + fActxx * fActxx)
+
+        fc = D / (lambd * focal)
+
+        fn2D = f2D / (1 / w)
+        fr2D = f2D / fc
+        fnAct = fAlt / (1 / w)
+        fnAlt = fAct / (1 / w)
         #TODO
         return fn2D, fr2D, fnAct, fnAlt
 
@@ -101,6 +117,7 @@ class mtf:
         :return: diffraction MTF
         """
         #TODO
+        Hdiff = (2/np.pi) * (np.acos(fr2D) - fr2D * (1 - fr2D**2)**(1/2))
         return Hdiff
 
 
@@ -113,6 +130,8 @@ class mtf:
         :param D: Telescope diameter [m]
         :return: Defocus MTF
         """
+        x = np.pi * defocus * fr2D * (1 - fr2D)
+        Hdefoc = 2 * j1(x) / x
         #TODO
         return Hdefoc
 
@@ -128,6 +147,7 @@ class mtf:
         :return: WFE Aberrations MTF
         """
         #TODO
+        Hwfe = np.exp(-fr2D * (1 - fr2D) * (kLF * (wLF / lambd) ** 2 + kHF * (wHF / lambd) ** 2))
         return Hwfe
 
     def mtfDetector(self,fn2D):
