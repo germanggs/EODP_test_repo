@@ -105,8 +105,8 @@ class mtf:
 
         fn2D = f2D / (1 / w)
         fr2D = f2D / fc
-        fnAct = fAlt / (1 / w)
-        fnAlt = fAct / (1 / w)
+        fnAct = fAct / (1 / w)
+        fnAlt = fAlt / (1 / w)
         #TODO
         return fn2D, fr2D, fnAct, fnAlt
 
@@ -116,8 +116,13 @@ class mtf:
         :param fr2D: 2D relative frequencies (f/fc), where fc is the optics cut-off frequency
         :return: diffraction MTF
         """
-        #TODO
-        Hdiff = (2/np.pi) * (np.acos(fr2D) - fr2D * (1 - fr2D**2)**(1/2))
+        # MTF = 2/pi * (acos(fr) - fr*sqrt(1 - fr^2))  for fr < 1
+        fr = np.clip(fr2D, 0, 1)
+        Hdiff = (2 / np.pi) * (np.arccos(fr) - fr * np.sqrt(1 - fr ** 2))
+
+        # MTF = 0 above the cut-off frequency
+        Hdiff[fr2D * fr2D > 1] = 0
+        
         return Hdiff
 
 
