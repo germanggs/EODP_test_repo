@@ -114,6 +114,7 @@ class opticalPhase(initIsm):
         # 4. Back to the spatial domain. The imaginary part should be negligible -> keep the real part
         toa_ft = ifft2(IMAGE_FFT)
         self.logger.debug("Max imaginary part after the MTF: " + str(np.max(np.abs(np.imag(toa_ft)))))
+        toa_ft = np.real(toa_ft)
         return toa_ft
 
     def spectralIntegration(self, sgm_toa, sgm_wv, band):
