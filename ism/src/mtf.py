@@ -116,13 +116,8 @@ class mtf:
         :param fr2D: 2D relative frequencies (f/fc), where fc is the optics cut-off frequency
         :return: diffraction MTF
         """
-        # MTF = 2/pi * (acos(fr) - fr*sqrt(1 - fr^2))  for fr < 1
-        fr = np.clip(fr2D, 0, 1)
-        Hdiff = (2 / np.pi) * (np.arccos(fr) - fr * np.sqrt(1 - fr ** 2))
-
-        # MTF = 0 above the cut-off frequency
-        Hdiff[fr2D * fr2D > 1] = 0
-        
+        #TODO
+        Hdiff = (2/np.pi) * (np.acos(fr2D) - fr2D * (1 - fr2D**2)**(1/2))
         return Hdiff
 
 
@@ -174,7 +169,9 @@ class mtf:
         :return: Smearing MTF
         """
         #TODO
-        Hsmear = np.abs(np.sinc(ksmear * fnAlt))
+        Hsmear = np.zeros((np.size(fnAlt), ncolumns))
+        for n in range(ncolumns):
+            Hsmear[:, n] = np.sinc(fnAlt * ksmear)
         return Hsmear
 
     def mtfMotion(self, fn2D, kmotion):
