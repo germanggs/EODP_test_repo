@@ -4,6 +4,7 @@ import numpy as np
 from common.io.writeToa import writeToa
 from common.plot.plotMat2D import plotMat2D
 from common.plot.plotF import plotF
+import scipy.constants as const
 
 class detectionPhase(initIsm):
 
@@ -104,6 +105,12 @@ class detectionPhase(initIsm):
         :param wv: Central wavelength of the band [m]
         :return: Toa in photons
         """
+        Planck = const.Planck
+        Speed_light = const.c
+
+        E = toa * area_pix * tint * 0.001
+        E_photon = Planck * Speed_light / wv
+        toa_ph = E / E_photon
         #TODO
         return toa_ph
 
@@ -115,6 +122,9 @@ class detectionPhase(initIsm):
         :return: toa in electrons
         """
         #TODO
+        FWC = self.ismConfig.FWC
+        toae = toa * QE
+        toae[toae > FWC] = FWC
         return toae
 
     def badDeadPixels(self, toa,bad_pix,dead_pix,bad_pix_red,dead_pix_red):
@@ -128,6 +138,7 @@ class detectionPhase(initIsm):
         :return: toa in e- including bad & dead pixels
         """
         #TODO
+        toa[:, 5] = toa[:, 5] * (1 - bad_pix_red)
         return toa
 
     def prnu(self, toa, kprnu):
@@ -138,6 +149,8 @@ class detectionPhase(initIsm):
         :return: TOA after adding PRNU [e-]
         """
         #TODO
+        PRNU = np.random.normal(0, 1, toa.shape[1]) * kprnu
+        toa = toa * (1 + PRNU)
         return toa
 
 
@@ -153,4 +166,8 @@ class detectionPhase(initIsm):
         :return: TOA in [e-] with dark signal
         """
         #TODO
+        DSNU = np.abs(np.random.normal(0, 1, toa.shape[1]) * kdsnu)
+        Sd = ds_A_coeff * ((T / Tref) * 3) * np.exp(-ds_B_coeff(1 / T - 1 / Tref))
+        DS = Sd * (1 + DSNU)
+        toa = toa + DS
         return toa
