@@ -1,4 +1,3 @@
-
 # LEVEL-1C
 
 from l1c.src.initL1c import initL1c
@@ -13,8 +12,8 @@ from matplotlib import cm
 
 class l1c(initL1c):
 
-    def __init__(self, auxdir, indir, outdir):
-        super().__init__(auxdir, indir, outdir)
+    def _init_(self, auxdir, indir, outdir):
+        super()._init_(auxdir, indir, outdir)
 
     def processModule(self):
 
@@ -63,7 +62,51 @@ class l1c(initL1c):
         :return: L1C radiances, L1C latitude and longitude in degrees
         '''
         #TODO
+
+        tck = bisplrep(
+            lat.flatten(),
+            lon.flatten(),
+            toa.flatten()
+        )
+
+        m = mgrs.MGRS()
+
+        mgrs_tiles = set()
+
+        for ialt in range(lat.shape[0]):
+            for iact in range(lat.shape[1]):
+
+                tile = m.toMGRS(
+                    lat[ialt, iact],
+                    lon[ialt, iact],
+                    MGRSPrecision=self.l1cConfig.mgrs_tile_precision
+                )
+
+                if isinstance(tile, bytes):
+                    tile = tile.decode('utf-8')
+
+                mgrs_tiles.add(tile)
+
+        mgrs_tiles = list(mgrs_tiles)
+
+        npoints = len(mgrs_tiles)
+
+        lat_l1c = np.zeros(npoints)
+        lon_l1c = np.zeros(npoints)
+        toa_l1c = np.zeros(npoints)
+
+        for i, tile in enumerate(mgrs_tiles):
+            lat_l1c[i], lon_l1c[i] = m.toLatLon(tile)
+
+            toa_l1c[i] = bisplev(
+                lat_l1c[i],
+                lon_l1c[i],
+                tck
+            )
+
         return lat_l1c, lon_l1c, toa_l1c
+
+
 
     def checkSize(self, lat,toa):
         '''
@@ -74,3 +117,10 @@ class l1c(initL1c):
         :return: NA
         '''
         #TODO
+if lat.shape != toa.shape:
+    raise ValueError(
+        'L1B TOA and geolocation matrices have different sizes: '
+        + str(toa.shape) + ' != ' + str(lat.shape)
+    )
+
+

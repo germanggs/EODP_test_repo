@@ -12,3 +12,11 @@ outdir = '/home/luss/EODP/eodp/l1c/test/ut01/output'
 # Initialise the ISM
 myL1c = l1c(auxdir, indir, outdir)
 myL1c.processModule()
+
+
+
+myL1c = l1c(auxdir, indir, outdir)
+myL1c.processModule()
+#savechanges
+#feefefeffe
+
