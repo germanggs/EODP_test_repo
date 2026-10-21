@@ -136,9 +136,14 @@ class mtf:
         :return: Defocus MTF
         """
         x = np.pi * defocus * fr2D * (1 - fr2D)
-        Hdefoc = 2 * j1(x) / x
-        #TODO
+
+        Hdefoc = np.ones_like(x)
+
+        nonzero = x != 0
+        Hdefoc[nonzero] = 2 * j1(x[nonzero]) / x[nonzero]
+
         return Hdefoc
+        #TODO
 
     def mtfWfeAberrations(self, fr2D, lambd, kLF, wLF, kHF, wHF):
         """
