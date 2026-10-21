@@ -117,8 +117,13 @@ class mtf:
         :return: diffraction MTF
         """
         #TODO
-        Hdiff = (2/np.pi) * (np.acos(fr2D) - fr2D * (1 - fr2D**2)**(1/2))
-        return Hdiff
+        f = np.clip(fr2D, 0.0, 1.0)
+
+        Hdiff = (2 / np.pi) * (
+            np.arccos(f) - f * np.sqrt(1 - f**2)
+        )
+
+        return Hdiff  
 
 
     def mtfDefocus(self, fr2D, defocus, focal, D):
