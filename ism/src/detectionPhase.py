@@ -5,6 +5,7 @@ from common.io.writeToa import writeToa
 from common.plot.plotMat2D import plotMat2D
 from common.plot.plotF import plotF
 import scipy.constants as const
+import os
 
 class detectionPhase(initIsm):
 
@@ -137,8 +138,46 @@ class detectionPhase(initIsm):
         :param dead_pix_red: Reduction in the quantum efficiency for the dead pixels [-, over 1]
         :return: toa in e- including bad & dead pixels
         """
-        #TODO
-        toa[:, 5] = toa[:, 5] * (1 - bad_pix_red)
+        # Number of detector elements across the image
+        toa_act = toa.shape[1]
+
+        # Convert percentages into numbers of affected elements
+        n_bad = int(toa_act * bad_pix / 100)
+        n_dead = int(toa_act * dead_pix / 100)
+
+        idx_bad = []
+        idx_dead = []
+
+        # Distribute bad elements starting at column 5
+        if n_bad > 0:
+            step_bad = int(toa_act / n_bad)
+            idx_bad = list(range(5, toa_act, step_bad))
+
+            for index in idx_bad:
+                toa[:, index] = toa[:, index] * (1 - bad_pix_red)
+
+        # Distribute dead elements starting at column 0
+        if n_dead > 0:
+            step_dead = int(toa_act / n_dead)
+            idx_dead = list(range(0, toa_act, step_dead))
+
+            for index in idx_dead:
+                toa[:, index] = toa[:, index] * (1 - dead_pix_red)
+
+        # Save the affected column indices
+        np.savetxt(
+            os.path.join(self.outdir, "bad_pixel_indices.txt"),
+            idx_bad,
+            fmt="%d"
+        )
+
+        np.savetxt(
+            os.path.join(self.outdir, "dead_pixel_indices.txt"),
+            idx_dead,
+            fmt="%d"
+        )
+
+        #TODO DONE
         return toa
 
     def prnu(self, toa, kprnu):
