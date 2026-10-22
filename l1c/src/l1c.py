@@ -61,13 +61,26 @@ class l1c(initL1c):
         :param band: band
         :return: L1C radiances, L1C latitude and longitude in degrees
         '''
-        #TODO
+        #TODO DONED
 
-        tck = bisplrep(
-            lat.flatten(),
-            lon.flatten(),
-            toa.flatten()
+        lat_min = lat.min()
+        lon_min = lon.min()
+        lat_range = np.ptp(lat)
+        lon_range = np.ptp(lon)
+
+        lat_scaled = (lat - lat_min) / lat_range
+        lon_scaled = (lon - lon_min) / lon_range
+
+        tck, fp, ier, message = bisplrep(
+            lat_scaled.flatten(),
+            lon_scaled.flatten(),
+            toa.flatten(),
+            full_output=1
         )
+
+        # Stop if the fit failed or contains invalid coefficients
+        if ier > 0 or not np.all(np.isfinite(tck[2])):
+            raise ValueError("L1C spline fit failed: " + message)
 
         m = mgrs.MGRS()
 
