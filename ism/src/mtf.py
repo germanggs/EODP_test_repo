@@ -70,7 +70,15 @@ class mtf:
         # Calculate the System MTF
         self.logger.debug("Calculation of the Sysmtem MTF by multiplying the different contributors")
         Hsys = Hdiff * Hdefoc * Hwfe * Hdet * Hsmear * Hmotion
-
+        # Save the individual MTFs and the combined system MTF
+        if self.ismConfig.save_mtfs:
+            writeMat(directory, "Hdiff_" + band, Hdiff)
+            writeMat(directory, "Hdefoc_" + band, Hdefoc)
+            writeMat(directory, "Hwfe_" + band, Hwfe)
+            writeMat(directory, "Hdet_" + band, Hdet)
+            writeMat(directory, "Hsmear_" + band, Hsmear)
+            writeMat(directory, "Hmotion_" + band, Hmotion)
+            writeMat(directory, "Hsys_" + band, Hsys)
         # Plot cuts ACT/ALT of the MTF
         self.plotMtf(Hdiff, Hdefoc, Hwfe, Hdet, Hsmear, Hmotion, Hsys, nlines, ncolumns, fnAct, fnAlt, directory, band)
 
