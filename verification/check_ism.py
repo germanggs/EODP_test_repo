@@ -6,8 +6,7 @@ root = Path(__file__).resolve().parents[1]
 base = root / "EODP_TER_2021" / "EODP-TS-ISM"
 
 reference_dir = base / "output"
-actual_dir = base / "Output_ISM_updated_20261022"
-
+actual_dir = base / "Output_ISM_python311"
 # 0.001% expressed as a fraction
 tolerance = 1e-5
 
