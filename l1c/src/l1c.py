@@ -62,7 +62,7 @@ class l1c(initL1c):
         :return: L1C radiances, L1C latitude and longitude in degrees
         '''
         #TODO DONED
-
+        toa = toa.astype(np.float64)
         lat_min = lat.min()
         lon_min = lon.min()
         lat_range = np.ptp(lat)
