@@ -16,6 +16,7 @@ if len(reference_files) != 56:
     raise ValueError("Expected 56 ISM reference files")
 
 failed = 0
+overall_max_error_percent = 0.0
 
 for reference_path in reference_files:
     actual_path = actual_dir / reference_path.name
@@ -53,12 +54,37 @@ for reference_path in reference_files:
 
     passed = finite and relative_ok and zeros_ok
     label = "PASS" if passed else "FAIL"
-    print(label, reference_path.name)
+
+    max_error_percent = np.inf
+
+    if finite:
+        max_error_percent = 0.0
+
+        if np.any(nonzero):
+            max_error_percent = 100 * np.max(
+                difference[nonzero] / np.abs(expected[nonzero])
+            )
+
+    overall_max_error_percent = max(
+        overall_max_error_percent, max_error_percent
+    )
+
+    print(
+        label,
+        reference_path.name,
+        f"| Maximum relative error: {max_error_percent:.8e}%"
+    )
+
 
     if not passed:
         failed += 1
 
 print("Files checked:", len(reference_files))
 print("Failed:", failed)
+print(
+    f"Overall maximum relative error: "
+    f"{overall_max_error_percent:.8e}%"
+)
+print("Required: relative error < 0.001%")
 
 raise SystemExit(1 if failed else 0)
