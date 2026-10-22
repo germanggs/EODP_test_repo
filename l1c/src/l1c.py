@@ -12,8 +12,8 @@ from matplotlib import cm
 
 class l1c(initL1c):
 
-    def _init_(self, auxdir, indir, outdir):
-        super()._init_(auxdir, indir, outdir)
+    def __init__(self, auxdir, indir, outdir):
+        super().__init__(auxdir, indir, outdir)
 
     def processModule(self):
 
@@ -116,11 +116,11 @@ class l1c(initL1c):
         :param toa: Radiance 2D matrix
         :return: NA
         '''
-        #TODO
-if lat.shape != toa.shape:
-    raise ValueError(
-        'L1B TOA and geolocation matrices have different sizes: '
-        + str(toa.shape) + ' != ' + str(lat.shape)
-    )
+        #TODO DONED
+        if lat.shape != toa.shape:
+            raise ValueError(
+                'L1B TOA and geolocation matrices have different sizes: '
+                + str(toa.shape) + ' != ' + str(lat.shape)
+            )
 
 
