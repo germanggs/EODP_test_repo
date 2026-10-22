@@ -5,8 +5,8 @@ from l1c.src.l1c import l1c
 auxdir = r"C:\EODP_test_repo\EODP_test_repo\auxiliary"
 
 # Geometry and radiances supplied for the L1C exercise
-gm_dir = r"C:\EODP_test_repo\EODP_test_repo\EODP-TS-E2E\gm_out" 
-l1b_dir = r"C:\EODP_test_repo\EODP_test_repo\EODP-TS-E2E\Output_ISM_l1b"
+gm_dir = r"C:\EODP_test_repo\EODP_test_repo\EODP_TER_2021\EODP-TS-L1C\input\gm_alt100_act_150"
+l1b_dir = r"C:\EODP_test_repo\EODP_test_repo\EODP_TER_2021\EODP-TS-L1C\input\l1b_output"
 
 # The existing initialisation expects two paths separated by a comma
 indir = gm_dir + "," + l1b_dir
