@@ -8,6 +8,8 @@ from common.io.readFactor import readFactor, EQ_MULT, EQ_ADD, NC_EXT
 import numpy as np
 import os
 import matplotlib.pyplot as plt
+from common.plot.plotMat2D import plotMat2D
+from common.plot.plotF import plotF
 
 class l1b(initL1b):
 
@@ -79,5 +81,29 @@ class l1b(initL1b):
         return toa
 
     def plotL1bToa(self, toa_l1b, outputdir, band):
-        #TODO
-        a=1 # dummy
+        filename = self.globalConfig.l1b_toa + band
+        title = "L1B radiance - " + band + " [mW/m2/sr]"
+
+        # Save the complete image
+        plotMat2D(
+            toa_l1b,
+            title,
+            "ACT pixel index",
+            "ALT pixel index",
+            outputdir,
+            filename
+        )
+
+        # Save a profile across the central row
+        middle_alt = toa_l1b.shape[0] // 2
+
+        plotF(
+            [],
+            toa_l1b[middle_alt, :],
+            title,
+            "ACT pixel index",
+            "Radiance [mW/m2/sr]",
+            outputdir,
+            filename + "_ACT_profile.png"
+        )
+        #TODO DONED
