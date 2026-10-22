@@ -1,22 +1,21 @@
-
 # MAIN FUNCTION TO CALL THE L1C MODULE
 
 from l1c.src.l1c import l1c
 
-# Directory - this is the common directory for the execution of the E2E, all modules
-auxdir = '/home/luss/EODP/eodp/auxiliary'
-# GM dir + L1B dir
-indir = '/home/luss/my_shared_folder/gm_out/gm_alt100_act_150/,/home/luss/EODP/eodp/l1b/test/ut02/output'
-outdir = '/home/luss/EODP/eodp/l1c/test/ut01/output'
+auxdir = r"C:\EODP_test_repo\EODP_test_repo\auxiliary"
 
-# Initialise the ISM
+# Geometry and radiances supplied for the L1C exercise
+gm_dir = r"C:\EODP_test_repo\EODP_test_repo\EODP_TER_2021\EODP-TS-L1C\input\gm_alt100_act_150"
+l1b_dir = r"C:\EODP_test_repo\EODP_test_repo\EODP_TER_2021\EODP-TS-L1C\input\l1b_output"
+
+# The existing initialisation expects two paths separated by a comma
+indir = gm_dir + "," + l1b_dir
+
+outdir = r"C:\EODP_test_repo\EODP_test_repo\EODP_TER_2021\EODP-TS-L1C\Output_L1C_updated_20261022"
+
+# Initialise and run L1C once
 myL1c = l1c(auxdir, indir, outdir)
 myL1c.processModule()
 
 
-
-myL1c = l1c(auxdir, indir, outdir)
-myL1c.processModule()
-#savechanges
-#feefefeffe
 
