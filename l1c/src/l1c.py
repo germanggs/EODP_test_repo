@@ -9,6 +9,7 @@ from scipy.interpolate import bisplrep, bisplev
 import matplotlib.pyplot as plt
 from common.io.l1cProduct import writeL1c
 from matplotlib import cm
+import os
 
 class l1c(initL1c):
 
@@ -36,6 +37,27 @@ class l1c(initL1c):
             # Write output TOA
             # -------------------------------------------------------------------------------
             writeL1c(self.outdir, self.globalConfig.l1c_toa + band, lat_l1c, lon_l1c, toa_l1c)
+            if self.l1cConfig.plotL1cGrid:
+                plt.figure(figsize=(10, 7))
+
+                plt.scatter(
+                    lon_l1c,
+                    lat_l1c,
+                    c=toa_l1c,
+                    s=6,
+                    cmap="viridis"
+                )
+
+                plt.colorbar(label="Radiance [mW/m2/sr]")
+                plt.xlabel("Longitude [degrees]")
+                plt.ylabel("Latitude [degrees]")
+                plt.title("L1C radiance - " + band)
+                plt.tight_layout()
+
+                plt.savefig(
+                    os.path.join(self.outdir, "l1c_map_" + band + ".png")
+                )
+                plt.close()
 
             self.logger.info("End of BAND " + band)
 
