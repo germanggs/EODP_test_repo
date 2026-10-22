@@ -112,8 +112,8 @@ class l1c(initL1c):
             lat_l1c[i], lon_l1c[i] = m.toLatLon(tile)
 
             toa_l1c[i] = bisplev(
-                lat_l1c[i],
-                lon_l1c[i],
+                (lat_l1c[i] - lat_min) / lat_range,
+                (lon_l1c[i] - lon_min) / lon_range,
                 tck
             )
 
