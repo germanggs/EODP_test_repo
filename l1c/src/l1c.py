@@ -84,18 +84,13 @@ class l1c(initL1c):
         :return: L1C radiances, L1C latitude and longitude in degrees
         '''
         #TODO DONED
-        toa = toa.astype(np.float64)
-        lat_min = lat.min()
-        lon_min = lon.min()
-        lat_range = np.ptp(lat)
-        lon_range = np.ptp(lon)
 
-        lat_scaled = (lat - lat_min) / lat_range
-        lon_scaled = (lon - lon_min) / lon_range
+        # Use 64-bit radiances for the spline calculation
+        toa = toa.astype(np.float64)
 
         tck, fp, ier, message = bisplrep(
-            lat_scaled.flatten(),
-            lon_scaled.flatten(),
+            lat.flatten(),
+            lon.flatten(),
             toa.flatten(),
             full_output=1
         )
@@ -134,11 +129,10 @@ class l1c(initL1c):
             lat_l1c[i], lon_l1c[i] = m.toLatLon(tile)
 
             toa_l1c[i] = bisplev(
-                (lat_l1c[i] - lat_min) / lat_range,
-                (lon_l1c[i] - lon_min) / lon_range,
+                lat_l1c[i],
+                lon_l1c[i],
                 tck
             )
-
         return lat_l1c, lon_l1c, toa_l1c
 
 
