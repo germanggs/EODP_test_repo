@@ -213,6 +213,53 @@ class mtf:
         :param band: band
         :return: N/A
         """
+        if not self.ismConfig.save_mtfs:
+            return
+
+        # Central row and column
+        middle_alt = nlines // 2
+        middle_act = ncolumns // 2
+
+        # Each matrix and its label
+        curves = [
+            (Hdiff, "Diffraction"),
+            (Hdefoc, "Defocus"),
+            (Hwfe, "Wavefront error"),
+            (Hdet, "Detector"),
+            (Hsmear, "Smearing"),
+            (Hmotion, "Motion"),
+            (Hsys, "System"),
+        ]
+
+        # ACT profile: take the central row
+        plt.figure(figsize=(10, 7))
+
+        for matrix, label in curves:
+            plt.plot(fnAct, matrix[middle_alt, :], label=label)
+
+        plt.title("MTF - ACT - " + band)
+        plt.xlabel("Normalised spatial frequency [-]")
+        plt.ylabel("MTF [-]")
+        plt.legend()
+        plt.grid()
+        plt.tight_layout()
+        plt.savefig(os.path.join(directory, "mtf_ACT_" + band + ".png"))
+        plt.close()
+
+        # ALT profile: take the central column
+        plt.figure(figsize=(10, 7))
+
+        for matrix, label in curves:
+            plt.plot(fnAlt, matrix[:, middle_act], label=label)
+
+        plt.title("MTF - ALT - " + band)
+        plt.xlabel("Normalised spatial frequency [-]")
+        plt.ylabel("MTF [-]")
+        plt.legend()
+        plt.grid()
+        plt.tight_layout()
+        plt.savefig(os.path.join(directory, "mtf_ALT_" + band + ".png"))
+        plt.close()
         #TODO
 
 
